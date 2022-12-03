@@ -1,4 +1,4 @@
-FROM lazytechwork/ubuntu:20.04
+FROM lazytechwork/nginx:ubuntu
 
 LABEL maintainer="Ivan R. Petrov"
 
