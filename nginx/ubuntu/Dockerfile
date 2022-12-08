@@ -10,6 +10,10 @@ ENV TZ "Europe/Moscow"
 
 RUN mkdir -p /var/www/application
 
+RUN useradd -U -ms /bin/bash -u 1337 $APPUSER
+RUN usermod -aG sudo $APPUSER
+RUN chown $APPUSER:$APPUSER /var/www/application
+
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update
 RUN apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor libcap2-bin libpng-dev python2 nginx
@@ -38,5 +42,4 @@ RUN apt-get clean
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 RUN export JAVA_HOME
 
-RUN useradd -U -ms /bin/bash -u 1337 $APPUSER
 RUN usermod -aG www-data $APPUSER

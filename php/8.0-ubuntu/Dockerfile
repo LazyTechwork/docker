@@ -2,6 +2,8 @@ FROM lazytechwork/nginx:ubuntu
 
 LABEL maintainer="Ivan R. Petrov"
 
+USER root
+
 RUN echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu focal main" > /etc/apt/sources.list.d/ppa_ondrej_php.list
 RUN apt-get update
 RUN apt-get install -y php8.0-cli php8.0-dev \
@@ -34,14 +36,15 @@ RUN update-alternatives --set php /usr/bin/php8.0
 RUN rm -rf /etc/nginx/sites-available/*
 RUN rm -rf /etc/nginx/sites-enabled/*
 
-COPY nginx.conf /etc/nginx/conf.d/application.conf
+COPY nginx-server.conf /etc/nginx/conf.d/application.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
 RUN nginx -t
 
-#COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY start.sh /usr/local/bin/container-start
 RUN chmod +x /usr/local/bin/container-start
 
 EXPOSE 80
 
-ENTRYPOINT ["container-start"]
+ENTRYPOINT ["su","-","root","-c","container-start"]
