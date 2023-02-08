@@ -36,7 +36,9 @@ RUN docker-php-ext-install xml
 RUN docker-php-ext-install opcache
 RUN docker-php-ext-install exif
 
-RUN cd /usr/local/etc/php/conf.d/ && \
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+RUN cd "$PHP_INI_DIR/conf.d/" && \
     echo "memory_limit = -1" >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
 
 RUN apt-get clean
@@ -44,9 +46,9 @@ RUN apt-get clean
 RUN rm -rf /etc/nginx/sites-available/*
 RUN rm -rf /etc/nginx/sites-enabled/*
 
-COPY php.ini /etc/php/8.1/fpm/conf.d/99-application.ini
-COPY xdebug.ini /etc/php/8.1/fpm/conf.d/99-xdebug.ini
-COPY fpm-pool.ini /etc/php/8.1/fpm/pool.d/www.conf
+COPY php.ini "$PHP_INI_DIR/conf.d/99-application.ini"
+COPY xdebug.ini "$PHP_INI_DIR/conf.d/99-xdebug.ini"
+COPY fpm-pool.ini /usr/local/etc/php-fpm.d/www.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx-app.conf /etc/nginx/conf.d/app.conf
 COPY supervisord.conf /etc/supervisor/supervisord.conf
