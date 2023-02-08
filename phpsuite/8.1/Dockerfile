@@ -52,7 +52,7 @@ COPY nginx-app.conf /etc/nginx/conf.d/app.conf
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY supervisor-nginx.conf /etc/supervisor/conf.d/supervisor-nginx.conf
 COPY supervisor-php-fpm.conf /etc/supervisor/conf.d/supervisor-php-fpm.conf
-COPY supervisor-npm.conf /etc/supervisor/conf.d/supervisor-npm.conf
+#COPY supervisor-npm.conf /etc/supervisor/conf.d/supervisor-npm.conf
 COPY container-start.sh /usr/local/bin/container-start
 
 RUN nginx -t
