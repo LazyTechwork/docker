@@ -10,12 +10,10 @@ RUN addgroup --gid 1000 app \
 RUN apt-get update -y
 
 RUN apt-get install -y \
-    libzip-dev libcurl4-gnutls-dev \
-    libicu-dev libmcrypt-dev libvpx-dev libjpeg-dev libpng-dev libxpm-dev zlib1g-dev libfreetype6-dev \
+    libzip-dev libicu-dev libmcrypt-dev libvpx-dev libjpeg-dev libpng-dev libxpm-dev zlib1g-dev libfreetype6-dev \
     libxml2-dev libexpat1-dev libbz2-dev libgmp3-dev libldap2-dev unixodbc-dev libpq-dev libsqlite3-dev \
     libaspell-dev libsnmp-dev libpcre3-dev libtidy-dev libonig-dev libmagickwand-dev libmagickcore-dev libgd-dev \
-    libjpeg62-turbo-dev libcurl-dev \
-    nginx supervisor libpq-dev
+    libjpeg62-turbo-dev libcurl4-openssl-dev nginx supervisor libpq-dev
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
@@ -26,28 +24,22 @@ RUN pecl install redis \
 	&& pecl install xdebug \
 	&& docker-php-ext-enable redis xdebug
 
-RUN docker-php-ext-install \
-    pdo \
-    pdo_mysql \
-    pdo_pgsql \
-    curl \
-    bcmath \
-    json \
-    opcache \
-    mbstring \
-    dom \
-    zip \
-    xml \
-    exif
-
-RUN docker-php-ext-enable imagick swoole uuid
+RUN docker-php-ext-install pdo
+RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install pdo_pgsql
+RUN docker-php-ext-install curl
+RUN docker-php-ext-install bcmath
+RUN docker-php-ext-install mbstring
+RUN docker-php-ext-install dom
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install xml
+RUN docker-php-ext-install opcache
+RUN docker-php-ext-install exif
 
 RUN cd /usr/local/etc/php/conf.d/ && \
     echo "memory_limit = -1" >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
 
 RUN apt-get clean
-
-RUN update-alternatives --set php /usr/bin/php8.1
 
 RUN rm -rf /etc/nginx/sites-available/*
 RUN rm -rf /etc/nginx/sites-enabled/*
