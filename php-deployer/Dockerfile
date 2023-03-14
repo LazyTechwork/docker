@@ -1,7 +1,7 @@
 FROM php:8.1-cli-bullseye
 
 RUN apt-get update -yqq
-RUN apt-get install -y unzip wget gnupg libcurl4-openssl-dev libonig-dev libzip-dev libxml2-dev
+RUN apt-get install -y openssh-client git unzip wget gnupg libcurl4-openssl-dev libonig-dev libzip-dev libxml2-dev
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install mbstring curl xml zip
